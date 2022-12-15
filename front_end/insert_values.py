@@ -1,46 +1,51 @@
-from tkinter import Tk, Label, StringVar, Button, Entry
-def get_matrix(n,m):
-    window = Tk()
-    window.title("Matrix")
-    window.geometry("650x500+120+120")
-    window.configure(bg='bisque2')
-    window.resizable(False, False)
+from tkinter import Tk, Frame, Label, Entry, X, Button, RAISED, CENTER
 
-    # empty arrays for your Entrys and StringVars
-    text_var = []
-    entries = []
+class Matrix(Tk):
+    def __init__(self, n:int, m:int):
+        super().__init__()
+        self.n = n
+        self.m = m
+        self.matrix:list = []
 
-    # callback function to get your StringVars
-    def get_mat():
-        matrix = []
-        for i in range(rows):
-            matrix.append([])
-            for j in range(cols):
-                matrix[i].append(text_var[i][j].get())
 
-        print(matrix)
+    def get_matrix(self):
+        # Construction of the grid for User's input
+        for i in range(self.n):
+            row = []
+            for j in range(self.m):
+                frame = Frame(self, relief=RAISED, borderwidth=1)
+                frame.grid(row=i, column=j)
+                Label(frame, text=f'Enter element at position{i+1}{j+1}').pack(fill=X)
+                entry = Entry(frame)
+                entry.pack(fill=X)
+                row.append(entry)
+            self.matrix.append(row)
 
-    Label(window, text="Enter matrix :", font=('arial', 10, 'bold'),
-          bg="bisque2").place(x=20, y=20)
+        # Add a Button to submit the matrix
+        Button(self, text='SUBMIT', command=lambda x='':self.submit()).grid(row=self.n+1, column=self.m//2)
 
-    x2 = 0
-    y2 = 0
-    rows, cols = (3,3)
-    for i in range(rows):
-        # append an empty list to your two arrays
-        # so you can append to those later
-        text_var.append([])
-        entries.append([])
-        for j in range(cols):
-            # append your StringVar and Entry
-            text_var[i].append(StringVar())
-            entries[i].append(Entry(window, textvariable=text_var[i][j],width=3))
-            entries[i][j].place(x=60 + x2, y=50 + y2)
-            x2 += 30
 
-        y2 += 30
-        x2 = 0
-    button= Button(window,text="Submit", bg='bisque3', width=15, command=get_mat)
-    button.place(x=160,y=140)
+    def submit(self):
+        # Append User's input values into a matrix
+        dummy = []
+        for i in range(self.n):
+            lista = []
+            for j in range(self.m):
+                lista.append(self.matrix[i][j].get())
+            dummy.append(lista)
 
-    window.mainloop()
+        # Transform values in matrix to appropriate type
+        for i in range(self.n):
+            for k in range(self.m):
+                if dummy[i][k] == '' or dummy[i][k] == ' ':
+                    dummy[i][k] = 0
+                else:
+                    dummy[i][k] = float(dummy[i][k])
+        self.destroy()
+
+
+
+
+x = Matrix(2,3)
+x.get_matrix()
+x.mainloop()
