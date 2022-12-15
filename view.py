@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import Tk
-from front_end.insert_values import get_matrix
+from front_end.insert_values import Matrix
+import numpy as np
 
 
 class View(Tk):
@@ -38,7 +39,9 @@ class View(Tk):
 
 
     def retrive_selection(self):
-        get_matrix(self.select_n.get(), self.select_m.get())
+        if self.selection_operation.get() == 'Matrix Inverse':
+
+
 
 
 
